@@ -4,6 +4,12 @@ import { useState } from "react";
 import { BrowserProvider, Contract } from "ethers";
 import abi from "../abi/MyNFT.json";
 
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 const CONTRACT_ADDRESS =
   "0x83117a4473195c54392B16C876802e4f22D5C3C3";
 
@@ -12,13 +18,13 @@ export default function MintNFT() {
 
   async function connectWallet() {
     try {
-      if (!(window as any).ethereum) {
+      if (!window.ethereum) {
         alert("Wallet non détecté");
         return;
       }
 
       const provider = new BrowserProvider(
-        (window as any).ethereum
+        window.ethereum
       );
 
       await provider.send(
@@ -26,11 +32,9 @@ export default function MintNFT() {
         []
       );
 
-      const signer =
-        await provider.getSigner();
+      const signer = await provider.getSigner();
 
-      const address =
-        await signer.getAddress();
+      const address = await signer.getAddress();
 
       setWallet(address);
     } catch (err) {
@@ -40,12 +44,16 @@ export default function MintNFT() {
 
   async function mintNFT() {
     try {
+      if (!window.ethereum) {
+        alert("Wallet non détecté");
+        return;
+      }
+
       const provider = new BrowserProvider(
-        (window as any).ethereum
+        window.ethereum
       );
 
-      const signer =
-        await provider.getSigner();
+      const signer = await provider.getSigner();
 
       const contract = new Contract(
         CONTRACT_ADDRESS,
@@ -56,8 +64,9 @@ export default function MintNFT() {
       const metadata =
         "ipfs://YOUR_METADATA_URI";
 
-      const tx =
-        await contract.mint(metadata);
+      const tx = await contract.mint(
+        metadata
+      );
 
       await tx.wait();
 
