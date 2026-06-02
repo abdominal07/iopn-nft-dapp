@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: "IOPN NFT DApp",
   description: "NFT minting on OPN Chain",
