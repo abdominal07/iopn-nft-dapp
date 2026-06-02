@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "IOPN NFT DApp",
+  description: "NFT minting on OPN Chain",
+};
+
 export default function RootLayout({
   children,
 }: {
